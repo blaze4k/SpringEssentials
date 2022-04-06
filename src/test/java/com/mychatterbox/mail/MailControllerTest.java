@@ -18,6 +18,7 @@ public class MailControllerTest {
     Mail myMail = new Mail();
     myMail.setSender("Obi-Wan");
     myMail.setMsg("Hello there");
+    System.out.printf(myMail.getMsg());
     ResponseEntity<Mail> response =
         testRestTemplate.postForEntity("/mail/send", new HttpEntity<>(myMail), Mail.class);
     System.out.printf(response.getBody().toString());

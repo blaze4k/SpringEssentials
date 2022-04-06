@@ -7,9 +7,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -19,14 +20,33 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class ChatControllerTest {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(HelloWorldControllerTest.class);
-  @Autowired private RestController restController;
 
   @Test
-  void testGetAllRooms(@Autowired TestRestTemplate testRestTemplate) {
-    List<String> roomList = Arrays.asList("Raum1", "Raum2", "Raum3");
-    ResponseEntity<String[]> response = testRestTemplate.getForEntity("/rooms", String[].class);
-    assertThat(response.getBody()[0]).isEqualTo(roomList.get(0));
-    assertThat(response.getBody()[1]).isEqualTo(roomList.get(1));
-    assertThat(response.getBody()[2]).isEqualTo(roomList.get(2));
+  void roomsReturnsRooms(@Autowired TestRestTemplate restTemplate) {
+    List<String> rooms =
+        new ArrayList<>(
+            Arrays.asList(
+                "Java",
+                "Spring Boot",
+                "Cars",
+                "Moin moin",
+                "Moep",
+                "Huhu",
+                "super",
+                "C#",
+                "Leons Room",
+                "Marius",
+                "Bester Raum",
+                "Hallo ihr da",
+                "Funktioniert",
+                "Gleich ist Feierabend",
+                "Noch sechs Minuten",
+                "Ist irgendwer hier?"));
+    ResponseEntity<String[]> response = restTemplate.getForEntity("/rooms", String[].class);
+    assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+    String[] responseRooms = response.getBody();
+    for (int i = 0; i < rooms.size(); i++) {
+      assertThat(rooms.get(i)).isEqualTo(responseRooms[i]);
+    }
   }
 }

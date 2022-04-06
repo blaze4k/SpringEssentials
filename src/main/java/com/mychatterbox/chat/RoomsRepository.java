@@ -22,8 +22,6 @@ import java.util.stream.Collectors;
 public class RoomsRepository {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(RoomsRepository.class);
-  private final String range = "Rooms";
-  private final String majorDimension = "COLUMNS";
   @Autowired private GoogleSheetsRoomsProperties googleSheetsRoomsProperties;
 
   //  @Value("${google.sheets.rooms.sheetId}")
@@ -48,8 +46,8 @@ public class RoomsRepository {
           service
               .spreadsheets()
               .values()
-              .get(googleSheetsRoomsProperties.getSheetId(), range)
-              .setMajorDimension(majorDimension)
+              .get(googleSheetsRoomsProperties.getSheetId(), googleSheetsRoomsProperties.getRange())
+              .setMajorDimension(googleSheetsRoomsProperties.getMajor())
               .execute();
       List<Object> values = result.getValues().get(0);
       rooms = values.stream().map(Object::toString).collect(Collectors.toList());

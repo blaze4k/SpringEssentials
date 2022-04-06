@@ -8,6 +8,9 @@ public class GoogleSheetsRoomsProperties {
 
   private String apiKey;
   private String sheetId;
+  private String range;
+  private String major;
+
 
   public Sheet getSheet() {
     return null;
@@ -27,5 +30,21 @@ public class GoogleSheetsRoomsProperties {
 
   public void setSheetId(String sheetId) {
     this.sheetId = sheetId;
+  }
+
+  public String getRange() {
+    return range;
+  }
+
+  public void setRange(String range) {
+    this.range = range;
+  }
+
+  public String getMajor() {
+    return major;
+  }
+
+  public void setMajor(String major) {
+    this.major = major;
   }
 }
