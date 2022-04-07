@@ -1,0 +1,47 @@
+{"properties": [
+  {
+    "name": "google.sheets.rooms.major",
+    "type": "java.lang.String",
+    "description": "A description for 'google.sheets.rooms.major'"
+  },
+  {
+    "name": "google.sheets.rooms.range",
+    "type": "java.lang.String",
+    "description": "A description for 'google.sheets.rooms.range'"
+  },
+  {
+    "name": "google.sheets.rooms.apiKey",
+    "type": "java.lang.String",
+    "description": "A description for 'google.sheets.rooms.apiKey'"
+  },
+  {
+    "name": "google.sheets.rooms.sheetId",
+    "type": "java.lang.String",
+    "description": "A description for 'google.sheets.rooms.sheetId'"
+  },
+  {
+    "name": "google.sheets.rooms.sheetId",
+    "type": "java.lang.String",
+    "description": "A description for 'google.sheets.rooms.sheetId'"
+  },
+  {
+    "name": "google.sheets.rooms.sheetId",
+    "type": "java.lang.String",
+    "description": "A description for 'google.sheets.rooms.sheetId'"
+  },
+  {
+    "name": "google.sheets.rooms.sheetId",
+    "type": "java.lang.String",
+    "description": "A description for 'google.sheets.rooms.sheetId'"
+  },
+  {
+    "name": "google.sheets.rooms.sheetId",
+    "type": "java.lang.String",
+    "description": "A description for 'google.sheets.rooms.sheetId'"
+  },
+  {
+    "name": "google.sheets.rooms.sheetId",
+    "type": "java.lang.String",
+    "description": "A description for 'google.sheets.rooms.sheetId'"
+  }
+]}

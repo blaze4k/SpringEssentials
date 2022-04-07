@@ -1,6 +1,5 @@
 package com.mychatterbox.chat;
 
-import com.google.api.services.sheets.v4.model.Sheet;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 @ConfigurationProperties("google.sheets.rooms")
@@ -10,11 +9,6 @@ public class GoogleSheetsRoomsProperties {
   private String sheetId;
   private String range;
   private String major;
-
-
-  public Sheet getSheet() {
-    return null;
-  }
 
   public String getApiKey() {
     return apiKey;
