@@ -1,29 +1,32 @@
 package com.mychatterbox.mail;
 
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.web.client.TestRestTemplate;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.http.MediaType;
+import org.springframework.test.web.servlet.MockMvc;
 
-import static org.assertj.core.api.Assertions.assertThat;
+@WebMvcTest(controllers = MailController.class)
+class MailControllerTest {
 
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class MailControllerTest {
+  @Autowired private MockMvc mvc;
+  @Autowired private ObjectMapper objectMapper;
 
   @Test
-  void testMail(@Autowired TestRestTemplate testRestTemplate) {
-    Mail myMail = new Mail();
-    myMail.setSender("Obi-Wan");
-    myMail.setMsg("Hello there");
-    System.out.printf(myMail.getMsg());
-    ResponseEntity<Mail> response =
-        testRestTemplate.postForEntity("/mail/send", new HttpEntity<>(myMail), Mail.class);
-    System.out.printf(response.getBody().toString());
-    assertThat(response.getStatusCode()).isEqualTo(HttpStatus.CREATED);
-    assertThat(response.getBody().getSender()).isEqualTo("Obi-Wan");
-    assertThat(response.getBody().getMsg()).isEqualTo("Hello there");
+  void testMail() throws Exception {
+    Mail mail = new Mail("User", "Message");
+    this.mvc
+        .perform(
+            post("/mail/send")
+                .content(objectMapper.writeValueAsString(mail))
+                .contentType(MediaType.APPLICATION_JSON))
+        .andExpect(status().isCreated())
+        .andExpect(jsonPath("$..sender").value(mail.getSender()))
+        .andExpect(jsonPath("$..msg").value(mail.getMsg()));
   }
 }

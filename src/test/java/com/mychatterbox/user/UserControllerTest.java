@@ -1,33 +1,40 @@
 package com.mychatterbox.user;
 
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.web.client.TestRestTemplate;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.http.MediaType;
+import org.springframework.test.web.servlet.MockMvc;
 
-import static org.assertj.core.api.Assertions.assertThat;
+@WebMvcTest(controllers = UserController.class)
+class UserControllerTest {
 
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class UserControllerTest {
+  @Autowired private MockMvc mvc;
+  @Autowired private ObjectMapper objectMapper;
 
   @Test
-  void testUser(@Autowired TestRestTemplate testRestTemplate) {
-    User myUser = new User();
-    myUser.setForeName("Max");
-    myUser.setLastName("Mustermann");
-    myUser.setAge(30);
-    myUser.setEmail("max.mustermann@mail.com");
-    myUser.setUserLevel("Admin");
-    ResponseEntity<User> response =
-        testRestTemplate.postForEntity("/user/create", new HttpEntity<>(myUser), User.class);
-    assertThat(response.getStatusCode()).isEqualTo(HttpStatus.CREATED);
-    assertThat(response.getBody().getForeName()).isEqualTo("Max");
-    assertThat(response.getBody().getLastName()).isEqualTo("Mustermann");
-    assertThat(response.getBody().getAge()).isEqualTo(30);
-    assertThat(response.getBody().getEmail()).isEqualTo("max.mustermann@mail.com");
-    assertThat(response.getBody().getUserLevel()).isEqualTo("Admin");
+  void testUser() throws Exception {
+    User user = new User();
+    user.setForeName("Max");
+    user.setLastName("Mustermann");
+    user.setAge(30);
+    user.setEmail("max.mustermann@mail.com");
+    user.setUserLevel("Admin");
+    this.mvc
+        .perform(
+            post("/user/create")
+                .content(objectMapper.writeValueAsString(user))
+                .contentType(MediaType.APPLICATION_JSON))
+        .andExpect(status().isCreated())
+        .andExpect(jsonPath("$..foreName").value(user.getForeName()))
+        .andExpect(jsonPath("$..lastName").value(user.getLastName()))
+        .andExpect(jsonPath("$..age").value(user.getAge()))
+        .andExpect(jsonPath("$..email").value(user.getEmail()))
+        .andExpect(jsonPath("$..userLevel").value(user.getUserLevel()));
   }
 }

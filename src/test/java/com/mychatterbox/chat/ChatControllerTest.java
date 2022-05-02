@@ -1,52 +1,70 @@
 package com.mychatterbox.chat;
 
-import com.mychatterbox.hello.HelloWorldControllerTest;
-import org.junit.jupiter.api.Test;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.web.client.TestRestTemplate;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.then;
+import static org.mockito.Mockito.times;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import java.util.ArrayList;
+import com.google.gson.Gson;
+import java.time.LocalDateTime;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.test.web.servlet.MockMvc;
 
-import static org.assertj.core.api.Assertions.assertThat;
+@WebMvcTest(controllers = ChatController.class)
+class ChatControllerTest {
 
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class ChatControllerTest {
-
-  private static final Logger LOGGER = LoggerFactory.getLogger(HelloWorldControllerTest.class);
+  private final Chat msg = new Chat("Ich", LocalDateTime.now(), "Java", "Hello World");
+  private final List<String> testList = Arrays.asList("Test1", "Test2");
+  private final String json = new Gson().toJson(testList);
+  @Autowired private MockMvc mvc;
+  @MockBean private ChatService chatService;
 
   @Test
-  void roomsReturnsRooms(@Autowired TestRestTemplate restTemplate) {
-    List<String> rooms =
-        new ArrayList<>(
-            Arrays.asList(
-                "Java",
-                "Spring Boot",
-                "Cars",
-                "Moin moin",
-                "Moep",
-                "Huhu",
-                "super",
-                "C#",
-                "Leons Room",
-                "Marius",
-                "Bester Raum",
-                "Hallo ihr da",
-                "Funktioniert",
-                "Gleich ist Feierabend",
-                "Noch sechs Minuten",
-                "Ist irgendwer hier?"));
-    ResponseEntity<String[]> response = restTemplate.getForEntity("/rooms", String[].class);
-    assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
-    String[] responseRooms = response.getBody();
-    for (int i = 0; i < rooms.size(); i++) {
-      assertThat(rooms.get(i)).isEqualTo(responseRooms[i]);
-    }
+  void testGetRooms() throws Exception {
+    given(this.chatService.getRooms()).willReturn(this.testList);
+    this.mvc
+        .perform(get("/chat/rooms"))
+        .andExpect(status().isOk())
+        .andExpect(content().string(json));
+    then(chatService).should(times(1)).getRooms();
+  }
+
+  @Test
+  void testGetMessages() throws Exception {
+    given(this.chatService.getMessages()).willReturn(Arrays.asList(this.msg));
+    this.mvc
+        .perform(get("/chat/messages"))
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("$..message").value(this.msg.getMessage()))
+        .andExpect(jsonPath("$..room").value(this.msg.getRoom()))
+        .andExpect(jsonPath("$..sender").value(this.msg.getSender()));
+  }
+
+  @Test
+  void testGetMessagesByRoom() throws Exception {
+    given(this.chatService.getMessagesByRoom("Java"))
+        .willReturn(Collections.singletonList(this.msg));
+    this.mvc
+        .perform(post("/chat/messages/{room}/show", this.msg.getRoom()))
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("$..message").value(this.msg.getMessage()))
+        .andExpect(jsonPath("$..room").value(this.msg.getRoom()))
+        .andExpect(jsonPath("$..sender").value(this.msg.getSender()));
+  }
+
+  @Test
+  void testGetMessageCount() throws Exception {
+    given(this.chatService.getMessagesCount()).willReturn(5L);
+    this.mvc.perform(get("/chat/messages/count")).andExpect(content().string(String.valueOf(5L)));
   }
 }

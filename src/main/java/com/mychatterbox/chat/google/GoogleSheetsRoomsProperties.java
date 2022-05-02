@@ -1,4 +1,4 @@
-package com.mychatterbox.chat;
+package com.mychatterbox.chat.google;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 

@@ -3,14 +3,14 @@ package com.mychatterbox.chat;
 import com.google.api.client.util.Lists;
 import com.google.api.services.sheets.v4.Sheets;
 import com.google.api.services.sheets.v4.model.ValueRange;
+import com.mychatterbox.chat.google.GoogleSheetsRoomsProperties;
+import java.io.IOException;
+import java.util.List;
+import java.util.stream.Collectors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
-
-import java.io.IOException;
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Repository
 public class RoomsRepository {
@@ -19,12 +19,6 @@ public class RoomsRepository {
   @Autowired private GoogleSheetsRoomsProperties googleSheetsRoomsProperties;
 
   @Autowired private Sheets roomSheets;
-
-  //  @Value("${google.sheets.rooms.sheetId}")
-  //  private String spreadsheetId;
-  //
-  //  @Value("${google.sheets.rooms.apiKey}")
-  //  private String apiKey;
 
   public List<String> findAll() {
     List<String> rooms = Lists.newArrayList();

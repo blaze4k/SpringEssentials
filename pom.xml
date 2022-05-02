@@ -1,91 +1,87 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <modelVersion>4.0.0</modelVersion>
-    <parent>
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns="http://maven.apache.org/POM/4.0.0"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <artifactId>mychatterbox</artifactId>
+  <build>
+    <plugins>
+      <plugin>
+        <artifactId>spring-boot-maven-plugin</artifactId>
         <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.6.6</version>
-        <relativePath/> <!-- lookup parent from repository -->
-    </parent>
-    <groupId>de.vw</groupId>
-    <artifactId>mychatterbox</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
-    <name>MyChatterbox</name>
-    <description>Demo project for Spring Boot</description>
-    <properties>
-        <java.version>1.8</java.version>
-    </properties>
-    <dependencies>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-web</artifactId>
-        </dependency>
+      </plugin>
+    </plugins>
+  </build>
+  <dependencies>
 
-        <dependency>
-            <groupId>org.springdoc</groupId>
-            <artifactId>springdoc-openapi-ui</artifactId>
-            <version>1.6.6</version>
-        </dependency>
+    <dependency>
+      <artifactId>spring-boot-starter-test</artifactId>
+      <exclusions>
+        <exclusion>
+          <artifactId>android-json</artifactId>
+          <groupId>com.vaadin.external.google</groupId>
+        </exclusion>
+      </exclusions>
+      <groupId>org.springframework.boot</groupId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <artifactId>springdoc-openapi-ui</artifactId>
+      <groupId>org.springdoc</groupId>
+      <version>1.6.6</version>
+    </dependency>
+    <dependency>
+      <artifactId>spring-boot-starter-web</artifactId>
+      <groupId>org.springframework.boot</groupId>
+    </dependency>
+    <dependency>
+      <artifactId>google-api-client</artifactId>
+      <groupId>com.google.api-client</groupId>
+      <version>1.30.4</version>
+    </dependency>
+    <dependency>
+      <artifactId>google-oauth-client-jetty</artifactId>
+      <groupId>com.google.oauth-client</groupId>
+      <version>1.30.6</version>
+    </dependency>
+    <dependency>
+      <artifactId>google-api-services-sheets</artifactId>
+      <groupId>com.google.apis</groupId>
+      <version>v4-rev581-1.25.0</version>
+    </dependency>
+    <!-- Google Spreadsheet Dependencies -->
+    <!-- https://mvnrepository.com/artifact/org.projectlombok/lombok -->
 
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-test</artifactId>
-            <scope>test</scope>
-        </dependency>
+    <dependency>
+      <artifactId>spring-boot-configuration-processor</artifactId>
+      <groupId>org.springframework.boot</groupId>
+      <version>2.6.6</version>
+    </dependency>
+    <dependency>
+      <artifactId>spring-data-cassandra</artifactId>
+      <groupId>org.springframework.data</groupId>
+    </dependency>
+    <dependency>
+      <groupId>com.google.code.gson</groupId>
+      <artifactId>gson</artifactId>
+      <version>2.9.0</version>
+      <scope>compile</scope>
+    </dependency>
 
-        <dependency>
-            <groupId>io.swagger.codegen.v3</groupId>
-            <artifactId>swagger-codegen-maven-plugin</artifactId>
-            <version>3.0.33</version>
-        </dependency>
+  </dependencies>
+  <description>Demo project for Spring Boot</description>
+  <groupId>de.vw</groupId>
+  <modelVersion>4.0.0</modelVersion>
+  <name>MyChatterbox</name>
+  <parent>
+    <artifactId>spring-boot-starter-parent</artifactId>
+    <groupId>org.springframework.boot</groupId>
+    <relativePath/>
+    <version>2.6.6</version> <!-- lookup parent from repository -->
+  </parent>
+  <properties>
+    <java.version>1.8</java.version>
+  </properties>
 
-        <!-- Google Spreadsheet Dependencies -->
-        <dependency>
-            <groupId>com.google.api-client</groupId>
-            <artifactId>google-api-client</artifactId>
-            <version>1.30.4</version>
-        </dependency>
-        <dependency>
-            <groupId>com.google.oauth-client</groupId>
-            <artifactId>google-oauth-client-jetty</artifactId>
-            <version>1.30.6</version>
-        </dependency>
-        <dependency>
-            <groupId>com.google.apis</groupId>
-            <artifactId>google-api-services-sheets</artifactId>
-            <version>v4-rev581-1.25.0</version>
-        </dependency>
-        <!-- Google Spreadsheet Dependencies -->
-
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-configuration-processor</artifactId>
-            <version>2.6.6</version>
-        </dependency>
-
-        <!-- https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter-api -->
-        <dependency>
-            <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter-api</artifactId>
-            <version>5.8.2</version>
-            <scope>test</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-actuator</artifactId>
-        </dependency>
-
-    </dependencies>
-
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-maven-plugin</artifactId>
-            </plugin>
-        </plugins>
-    </build>
+  <version>0.0.1-SNAPSHOT</version>
 
 </project>
